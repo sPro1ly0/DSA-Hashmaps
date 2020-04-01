@@ -1,11 +1,11 @@
 class HashMap {
     constructor(initialCapacity=8) {
         this.length = 0;
-        this._hashTable = [];
+        this._hashTable = []; // hold all data
         this._capacity = initialCapacity;
         this._deleted = 0;
     }
-
+    // hash a string and output a number, djb2 algorithm
     static _hashString(string) {
         let hash = 5381;
         for (let i = 0; i < string.length; i++) {
@@ -24,11 +24,11 @@ class HashMap {
     get(key) {
         const index = this._findSlot(key);
         if (this._hashTable[index] === undefined) {
-            throw new Error ('Key error');
+            return undefined;
         }
         return this._hashTable[index].value;
     }
-
+    // locate correct slot and add item to hash map
     set(key, value) {
         const loadRatio = (this.length + this._deleted + 1) / this._capacity;
         if (loadRatio > HashMap.MAX_LOAD_RATIO) {
@@ -40,11 +40,13 @@ class HashMap {
         if (!this._hashTable[index]) {
             this.length++;
         }
+
         this._hashTable[index] = {
             key,
             value,
             DELETED: false
         };
+        
     }
 
     delete(key) {
@@ -63,9 +65,10 @@ class HashMap {
     the hash of the key, and then uses the modulus to find
      a slot for the key within the current capacity. */
     _findSlot(key) {
-        const hash = HashMap._hashString(key); // calculate hash of key
+        const hash = HashMap._hashString(key); // calculate hash of key which will output a numer
         const start = hash % this._capacity; // find slot for key within current capacity
-
+        //  It loops through the array, stopping when 
+        //it finds the slot with a matching key or an empty slot. 
         for (let i = start; i < start + this._capacity; i++) {
             const index = i % this._capacity;
             const slot = this._hashTable[index];
@@ -90,3 +93,8 @@ class HashMap {
         }
     }
 }
+
+HashMap.MAX_LOAD_RATIO = 0.9;
+HashMap.SIZE_RATIO = 3;
+
+module.exports = HashMap;
