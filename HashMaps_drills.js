@@ -1,7 +1,9 @@
 const HashMap = require('./hashmap');
+const HashMapChain = require('./hash-separate-chain');
 
 function main() {
-    const lotr = new HashMap();
+    // const lotr = new HashMap();
+    const lotr = new HashMapChain();
     HashMap.MAX_LOAD_RATIO = 0.5;
     HashMap.SIZE_RATIO = 3;
 
@@ -16,17 +18,17 @@ function main() {
     lotr.set('LadyOfLight', 'Galadriel');
     lotr.set('HalfElven', 'Arwen');
     lotr.set('Ent', 'Treebeard');
-    // return lotr; 
+    return lotr; 
 
     // Retrieve the value that is hashed in the key "Maiar" and "Hobbit".
-    console.log(lotr.get('Maiar')); // Sauron
-    console.log(lotr.get('Hobbit')); // Frodo
+    // console.log(lotr.get('Maiar')); // Sauron
+    // console.log(lotr.get('Hobbit')); // Frodo
     // When a duplicate key is set with a new value, 
     // the new value will replace the old value. The get method will return
     // the newest values which are Sauron and Frodo.
 }
 
-// console.log(main()); 
+console.log(main()); 
 
 /* Print your hash map and notice the length and items 
 that are hashed in your hash map. Have you hashed all the items you were asked to? */
@@ -119,10 +121,25 @@ function palindrome(str) {
 
 // 6. Anagram grouping
 function anagramGroups(list) {
-    let map = new HashMap();
-    
-}
-let east = ['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race'];
-console.log(anagramGroups(east));
+    const map = new Map();
 
-// 7. Separate Chaining
+    list.forEach((word) => {
+        let sorted = alphabetize(word);
+
+        if (map.has(sorted)) {
+            map.get(sorted).push(word);
+        } else {
+            map.set(sorted, [word]);
+        }
+    });
+
+    return [...map.values()];
+};
+
+const alphabetize = word => {
+    let alphebtized = word.split('').sort().join('');
+    return alphebtized;
+};
+
+let east = ['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race'];
+// console.log(anagramGroups(east)); // [['east', 'eats', 'teas'], ['race', 'acre'], ['cars', 'arcs']]
